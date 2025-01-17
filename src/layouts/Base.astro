@@ -1,5 +1,7 @@
 ---
-import Header from "../components/header.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import "../assets/css/base.css";
 
 const { titre } = Astro.props;
 ---
@@ -17,4 +19,5 @@ const { titre } = Astro.props;
             <slot />
         </main>
     </body>
+    <Footer />
 </html>
