@@ -1,3 +1,3 @@
-> - Prénom:
-> - Nom:
+> - Prénom: Loréna 
+> - Nom: Chevallot
 > - URL netlify: 
