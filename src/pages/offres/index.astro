@@ -7,8 +7,12 @@ const offres = await allMaisons();
 ---
 
 <Base titre="Offres">
-    <h1>Offres</h1>
-    <div class="flex flex-col gap-6" x-data="{ showFavorites: false }">
+    <h1
+        class="text-4xl py-2 font-bold text-center text-black-600 mt-6 mb-4 underline decoration-black-400"
+    >
+        Offres
+    </h1>
+    <div class="flex flex-col gap-12" x-data="{ showFavorites: false }">
         <button
             class="bg-gray-200 block w-auto px-10 py-2 self-start rounded-lg"
             @click="showFavorites = !showFavorites"
@@ -16,6 +20,7 @@ const offres = await allMaisons();
             <span x-show="!showFavorites">Afficher les favoris</span>
             <span x-show="showFavorites">Afficher tout</span>
         </button>
+        <a href="/offres/surface/80">Voir les maisons de plus de 80 m²</a>
 
         <div
             class="grid grid-cols-3 gap-5"
