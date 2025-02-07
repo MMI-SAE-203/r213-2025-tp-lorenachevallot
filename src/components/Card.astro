@@ -1,6 +1,7 @@
 ---
-const { nomMaison, adresse, nbChambres, nbSdb, surface, prix, imgUrl } =
+const { nomMaison, adresse, nbChambres, id, nbSdb, surface, prix, imgUrl } =
     Astro.props;
+    
 ---
 
 <li class="w-full max-w-xl shadow-md p-4 rounded-lg flex flex-col gap-2">
@@ -10,4 +11,5 @@ const { nomMaison, adresse, nbChambres, nbSdb, surface, prix, imgUrl } =
     <p>Surface : {surface} m²</p>
     <p>Prix : {prix} €</p>
     <img src={imgUrl} alt="" />
+    <a href=`/offres/${id}`>voir plus</a>
 </li>
