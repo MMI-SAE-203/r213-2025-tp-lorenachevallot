@@ -38,12 +38,26 @@ export async function allMaisonsSorted() {
 
 //Exercice 14
 export async function bySurface(surface) {
-    const records = await pb
+    let records = await pb
         .collection("maison")
         .getFullList({ filter: `surface >= ${surface}` });
+    records = records.map((maison) => {
+        maison.imgUrl = pb.files.getURL(maison, maison.image);
+        return maison;
+    });
     return records;
 }
 
+export async function byPrice(prix) {
+    let records = await pb
+        .collection("maison")
+        .getFullList({ filter: `prix <= ${prix}` });
+    records = records.map((maison) => {
+        maison.imgUrl = pb.files.getURL(maison, maison.image);
+        return maison;
+    });
+    return records;
+}
 //Exercice 15
 export async function surfaceORprice(surface, p) {
     const records = await pb
@@ -56,7 +70,7 @@ export async function surfaceORprice(surface, p) {
 export async function getAgentById(id) {
     const record = await pb.collection("agent").getOne(id);
     return record;
-}   
+}
 
 
 export async function getOffre(id) {
