@@ -1,3 +1,4 @@
+import { record } from "astro:schema";
 import PocketBase from "pocketbase";
 const pb = new PocketBase("http://127.0.0.1:8090");
 
@@ -8,6 +9,7 @@ export async function superUserauth() {
     const authData = await pb.collection("_superusers").authWithPassword("admin@gmail.com", "ET2Sn9Qk2lRZsPv");
     return authData;
 }
+
 
 //fonction addOffre dans backend.mjs
 export async function addOffre(house) {
@@ -28,7 +30,7 @@ export async function addOffre(house) {
 
 //TP1
 export async function allMaisons() {
-    superUserauth();
+    await superUserauth();
     let records = await pb.collection("maison").getFullList();
     records = records.map((maison) => {
         maison.imgUrl = pb.files.getURL(maison, maison.image);
@@ -67,9 +69,14 @@ export async function allMaisonsSorted() {
 
 //Exercice 14
 export async function bySurface(surface) {
-    const records = await pb
+    await superUserauth();
+    let records = await pb
         .collection("maison")
         .getFullList({ filter: `surface >= ${surface}` });
+    records = records.map((maison) => {
+        maison.imgUrl = pb.files.getURL(maison, maison.image);
+        return maison;
+    });
     return records;
 }
 
@@ -137,6 +144,20 @@ export async function bySurfaceAgent(surface, agentId) {
     return records;
 }
 
+export async function byPrice(prix) {
+    await superUserauth();
+    await superUserauth();
+    let records = await pb.collection("maison").getFullList({
+        filter: `prix < ${prix}`,
+    });
+    records = records.map((maison) => {
+        maison.imgUrl = pb.files.getURL(maison, maison.image);
+        return maison;
+    });
+    return records;
+}
+
+
 //Exercice 12
 
 export async function maisonFavoriAgent(agentId) {
@@ -195,6 +216,27 @@ export async function getOffre(id) {
     } catch (error) {
         console.log('Une erreur est survenue en lisant la maison', error);
         return null;
+    }
+}
+
+//Fonction filterByPrix:
+
+export async function filterByPrix(prixMin, prixMax) {
+    await superUserauth();
+    try {
+        let data = await pb.collection('maison').getFullList({
+            sort: '-created',
+            filter: `prix >= ${prixMin} && prix <= ${prixMax}`
+        });
+        data = data.map((maison) => {
+            maison.imgUrl = pb.files.getURL(maison, maison.image);
+            return maison;
+        });
+        pb.authStore.clear();
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en filtrant la liste des maisons', error);
+        return [];
     }
 }
 

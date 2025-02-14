@@ -3,7 +3,29 @@ import Base from "../../layouts/Base.astro";
 import Card from "../../components/Card.astro";
 import { allMaisons } from "../../backend.mjs";
 
-const offres = await allMaisons();
+import { filterByPrix } from "../../backend.mjs";
+
+let message = "";
+let offres = [];
+if (Astro.request.method === "POST") {
+    const data = await Astro.request.formData();
+    const minPrix = parseInt(data.get("minPrix") as string);
+    const maxPrix = parseInt(data.get("maxPrix") as string);
+
+    if (minPrix > 0 && maxPrix > 0 && maxPrix > minPrix) {
+        offres = await filterByPrix(minPrix, maxPrix);
+        if (offres.length === 0) {
+            message = `Pas d'offres entre ${minPrix}€ et ${maxPrix}€`;
+        } else {
+            message = `Liste des offres entre ${minPrix}€ et ${maxPrix}€`;
+        }
+    } else {
+        message = "Veuillez entrer des valeurs valides pour le prix.";
+        offres = await allMaisons();
+    }
+} else {
+    offres = await allMaisons();
+}
 ---
 
 <Base titre="Offres">
@@ -20,6 +42,33 @@ const offres = await allMaisons();
             <span x-show="!showFavorites">Afficher les favoris</span>
             <span x-show="showFavorites">Afficher tout</span>
         </button>
+
+        <form
+            class="flex flex-col md:flex-row items-center gap-4 bg-gray-100 p-6 rounded-xl shadow-lg max-w-xl mx-auto border border-gray-200"
+            action="/offres"
+            method="POST"
+        >
+            <input
+                class="w-full md:w-1/3 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
+                type="number"
+                name="minPrix"
+                placeholder="Prix minimum"
+            />
+
+            <input
+                class="w-full md:w-1/3 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
+                type="number"
+                name="maxPrix"
+                placeholder="Prix maximum"
+            />
+
+            <input
+                class="w-full md:w-auto bg-blue-900 text-white px-6 py-3 rounded-lg font-semibold shadow-md cursor-pointer hover:bg-blue-700 hover:shadow-lg transition-all duration-300"
+                type="submit"
+                value="Filtrer"
+            />
+        </form>
+
         <div class="mt-6 flex flex-col sm:flex-row gap-4">
             <a
                 href="/offres/surface/80"
