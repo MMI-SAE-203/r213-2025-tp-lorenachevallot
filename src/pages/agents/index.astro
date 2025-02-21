@@ -1,0 +1,15 @@
+---
+import Base from "../../layouts/Base.astro";
+
+import { getAllAgents } from "../../backend.mjs";
+import CardAgent from "../../components/CardAgent.astro";
+
+const agents = await getAllAgents();
+console.log(agents);
+---
+
+<Base>
+    <div class="grid grid-col-1 lg:grid-cols-3 gap-20">
+        {agents.map((agent) => <CardAgent {...agent} />)}
+    </div>
+</Base>

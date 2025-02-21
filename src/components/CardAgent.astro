@@ -1,0 +1,33 @@
+---
+const agent = Astro.props;
+---
+
+<div
+    class="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300 max-w-lg mx-auto"
+>
+    <div class="flex flex-col items-center space-y-5">
+        <h1 class="text-3xl font-bold text-gray-800">Profil de l'Agent</h1>
+        <div
+            class="w-28 h-28 bg-gradient-to-tr from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-inner"
+        >
+            {agent.nom[0]}
+        </div>
+        <div class="text-center space-y-3">
+            <p class="text-xl font-semibold text-gray-700">
+                {agent.nom}
+                {agent.prenom}
+            </p>
+            <p class="text-md text-gray-500">{agent.email}</p>
+            <p class="text-md text-gray-600">
+                Expérience : <span class="font-bold"
+                    >{agent.experience} ans</span
+                >
+            </p>
+        </div>
+        <button
+            class="mt-5 px-5 py-2 bg-blue-900 text-white text-md rounded-xl hover:bg-blue-700 transition-colors shadow-md"
+        >
+            <a href={`/agents/${agent.id}`} class="btn">En savoir plus</a>
+        </button>
+    </div>
+</div>

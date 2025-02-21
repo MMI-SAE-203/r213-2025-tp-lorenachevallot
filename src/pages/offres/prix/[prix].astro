@@ -8,7 +8,7 @@ const offres = await byPrice(prix);
 ---
 
 <Base>
-    <h2>Offres à moins de {prix} €</h2>
+    <h2 class="">Offres à moins de {prix} €</h2>
     <div class="grid grid-cols-3 gap-5">
         {offres.map((offre) => <Card {...offre} />)}
     </div>
